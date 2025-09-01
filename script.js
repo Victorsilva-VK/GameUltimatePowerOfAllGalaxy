@@ -2,6 +2,7 @@ const dino = document.getElementById('dino');
 const game = document.getElementById('game');
 const scoreDisplay = document.getElementById('score');
 const gameOverMessage = document.getElementById('gameOverMessage');
+const coinDisplay = document.getElementById('coinCount');
 
 const insults = [
   "Você é mais lento que uma tartaruga com preguiça!",
@@ -21,6 +22,7 @@ let position = 0;
 let score = 0;
 let gameOver = false;
 let obstacles = [];
+let activeCoins = [];
 
 let speed = 8;
 const speedIncreaseInterval = 1000;
@@ -31,8 +33,16 @@ let lastSpeedIncreaseTime = Date.now();
 let record = localStorage.getItem('dinoRecord') || 0;
 record = Number(record);
 
+// Moedas salvas no localStorage
+let coins = localStorage.getItem('dinoCoins') || 0;
+coins = Number(coins);
+
 function updateScore() {
   scoreDisplay.textContent = `Pontuação: ${score} | Recorde: ${record}`;
+}
+
+function updateCoinCount() {
+    coinDisplay.textContent = coins;
 }
 
 // --- Sistema de pulo apenas dinâmico ---
@@ -85,8 +95,67 @@ function jump() {
   doJump(dynamicHeight, dynamicDelay);
 }
 
+function createCoin() {
+    if (gameOver) return;
+
+    const coin = document.createElement('div');
+    coin.classList.add('coin');
+    
+    // Altura aleatória, evitando o chão e o teto extremo
+    const randomHeight = 20 + Math.random() * 80; 
+    coin.style.bottom = randomHeight + 'px';
+
+    game.appendChild(coin);
+    activeCoins.push(coin);
+
+    let coinPosition = -20;
+    coin.style.left = coinPosition + 'px';
+
+    function moveCoin() {
+        if (gameOver) {
+            coin.remove();
+            return;
+        }
+
+        coinPosition += speed;
+        coin.style.left = coinPosition + 'px';
+
+        // Detecção de colisão com o dinossauro
+        const dinoRect = dino.getBoundingClientRect();
+        const coinRect = coin.getBoundingClientRect();
+
+        if (
+            dinoRect.left < coinRect.right &&
+            dinoRect.right > coinRect.left &&
+            dinoRect.top < coinRect.bottom &&
+            dinoRect.bottom > coinRect.top
+        ) {
+            // Colisão!
+            coins++;
+            updateCoinCount();
+            localStorage.setItem('dinoCoins', coins);
+            coin.remove();
+            activeCoins = activeCoins.filter(c => c !== coin);
+            return; // Para a execução desta moeda
+        }
+
+        if (coinPosition > game.offsetWidth + 20) {
+            coin.remove();
+            activeCoins = activeCoins.filter(c => c !== coin);
+        } else {
+            requestAnimationFrame(moveCoin);
+        }
+    }
+    moveCoin();
+}
+
 function createObstacle() {
   if (gameOver) return;
+  
+  // Adiciona uma chance de criar uma moeda junto com o obstáculo
+  if (Math.random() > 0.5) { // 50% de chance
+      setTimeout(createCoin, Math.random() * 500); // Pequeno atraso para não sobrepor
+  }
 
   function spawnSingleObstacle(delay = 0) {
     setTimeout(() => {
@@ -157,6 +226,7 @@ function createObstacle() {
           gameOverMessage.style.display = 'block';
 
           obstacles.forEach(obs => obs.remove());
+          activeCoins.forEach(c => c.remove()); // Remove as moedas restantes
 
           if (newRecord) {
             alert(`Novo recorde!\n\n${finalMsg}`);
@@ -216,4 +286,5 @@ document.addEventListener('keyup', (e) => {
 });
 
 updateScore();
+updateCoinCount();
 createObstacle();

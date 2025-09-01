@@ -80,3 +80,14 @@ body {
 #restartBtn:hover {
   background-color: #900;
 }
+
+.coin {
+  position: absolute;
+  bottom: 0;
+  left: -20px;
+  width: 20px;
+  height: 20px;
+  background-color: #ffd700; /* Dourado */
+  border-radius: 50%;
+  border: 2px solid #e6b800;
+}
