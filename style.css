@@ -116,6 +116,20 @@ body {
 }
 #restartBtn:hover { background-color: #900; }
 
+.secondary-btn {
+  margin-top: 10px;
+  padding: 8px 16px;
+  font-size: 16px;
+  background-color: #6c757d; /* Um cinza neutro */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.secondary-btn:hover {
+  background-color: #5a6268;
+}
+
 /* --- Tela da Loja --- */
 .shop-header {
   display: flex;

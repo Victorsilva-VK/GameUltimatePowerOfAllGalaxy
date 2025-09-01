@@ -149,8 +149,13 @@ function resetGame() {
     position = 0;
     score = 0;
     speed = 8;
-    obstacles.forEach(obs => obs.remove());
-    activeCoins.forEach(c => c.remove());
+    
+    // Limpa elementos do DOM do jogo anterior
+    const gameObstacles = game.querySelectorAll('.obstacle');
+    gameObstacles.forEach(obs => obs.remove());
+    const gameCoins = game.querySelectorAll('.coin');
+    gameCoins.forEach(c => c.remove());
+
     obstacles = [];
     activeCoins = [];
     
@@ -165,7 +170,6 @@ function startGame() {
     resetGame();
     showScreen('game');
     
-    // Inicia o loop de criação de obstáculos e moedas
     function gameCreationLoop() {
         if(gameOver) {
             clearInterval(gameLoopInterval);
@@ -177,14 +181,11 @@ function startGame() {
         }
     }
 
-    gameCreationLoop(); // Chama a primeira vez
+    gameCreationLoop();
     const interval = Math.max(400, 1500 - (speed - 8) * 150);
     gameLoopInterval = setInterval(gameCreationLoop, interval + Math.random() * 400);
 }
 
-function doJump(dynamicHeight, dynamicDelay) { /* ... (código inalterado) ... */ }
-function jump() { /* ... (código inalterado) ... */ }
-// Colando o código de pulo inalterado para completude
 function doJump(dynamicHeight, dynamicDelay) {
   if (isJumping || gameOver) return;
   isJumping = true;
@@ -200,6 +201,7 @@ function doJump(dynamicHeight, dynamicDelay) {
     } else { position += 10; dino.style.bottom = position + 'px'; }
   }, baseDelay);
 }
+
 function jump() {
   if (gameOver || isJumping) return;
   const jumpHoldTime = Date.now() - jumpPressStart;
@@ -211,7 +213,6 @@ function jump() {
   const dynamicDelay = maxDelay - ((hold - minHold) / (maxHold - minHold)) * (maxDelay - minDelay);
   doJump(dynamicHeight, dynamicDelay);
 }
-// Fim do código de pulo inalterado
 
 function createCoin() {
     if (gameOver) return;
@@ -281,14 +282,30 @@ function createObstacle() {
             }
             const finalMsg = `${insults[Math.floor(Math.random()*insults.length)]}\n\nSua pontuação: ${score}\nRecorde: ${record}`;
             gameOverMessage.textContent = finalMsg;
-            if (!document.getElementById('restartBtn')) {
-                const btn = document.createElement('button');
-                btn.id = 'restartBtn';
-                btn.textContent = 'Jogar Novamente';
-                btn.onclick = startGame;
-                gameOverMessage.appendChild(document.createElement('br'));
-                gameOverMessage.appendChild(btn);
-            }
+            
+            const existingBtn = document.getElementById('restartBtn');
+            const existingMenuBtn = document.getElementById('backToMenuBtn_GO');
+            if (existingBtn) existingBtn.remove();
+            if (existingMenuBtn) existingMenuBtn.remove();
+            
+            const restartBtn = document.createElement('button');
+            restartBtn.id = 'restartBtn';
+            restartBtn.textContent = 'Jogar Novamente';
+            restartBtn.onclick = startGame;
+            
+            const backToMenuBtn_GO = document.createElement('button');
+            backToMenuBtn_GO.id = 'backToMenuBtn_GO';
+            backToMenuBtn_GO.textContent = 'Voltar ao Menu';
+            backToMenuBtn_GO.className = 'secondary-btn';
+            backToMenuBtn_GO.onclick = () => {
+                resetGame();
+                showScreen('menu');
+            };
+
+            gameOverMessage.appendChild(document.createElement('br'));
+            gameOverMessage.appendChild(restartBtn);
+            gameOverMessage.appendChild(backToMenuBtn_GO);
+            
             gameOverMessage.style.display = 'block';
             return;
         }
