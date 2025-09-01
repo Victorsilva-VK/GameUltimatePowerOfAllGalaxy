@@ -1,14 +1,49 @@
+/* --- Estilos Gerais --- */
 body {
   margin: 0;
   overflow: hidden;
   background-color: #f7f7f7;
   font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
+
+.screen {
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
+}
+
+.menu-btn {
+  display: block;
+  margin: 15px auto;
+  padding: 15px 30px;
+  font-size: 20px;
+  background-color: #369;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 250px;
+}
+.menu-btn:hover {
+  background-color: #256a9e;
+}
+
+/* --- Tela do Menu Principal --- */
+#mainMenu h1 {
+  font-size: 48px;
+  color: #444;
+}
+
+/* --- Tela de Jogo --- */
 #game {
   position: relative;
   width: 800px;
   height: 200px;
-  margin: 50px auto;
+  margin: 20px auto;
   border: 2px solid #555;
   background-color: #fff;
   overflow: hidden;
@@ -16,38 +51,40 @@ body {
 #dino {
   position: absolute;
   bottom: 0;
-  right: 50px; /* Dinossauro fica na direita */
+  right: 50px;
   width: 40px;
   height: 40px;
   background-color: #444;
   border-radius: 5px;
+  transition: background-color 0.2s; /* Para transição suave de skin */
 }
 .obstacle {
   position: absolute;
   bottom: 0;
-  left: -30px; /* começa fora da tela, do lado esquerdo */
+  left: -30px;
   border-radius: 3px;
 }
-.small {
+.small { width: 20px; height: 30px; background-color: #555; }
+.medium { width: 25px; height: 50px; background-color: #a33; }
+.large { width: 30px; height: 70px; background-color: #369; }
+
+.coin {
+  position: absolute;
+  bottom: 0;
+  left: -20px;
   width: 20px;
-  height: 30px;
-  background-color: #555;
+  height: 20px;
+  background-color: #ffd700;
+  border-radius: 50%;
+  border: 2px solid #e6b800;
 }
-.medium {
-  width: 25px;
-  height: 50px;
-  background-color: #a33;
-}
-.large {
-  width: 30px;
-  height: 70px;
-  background-color: #369;
-}
+
 #score {
   text-align: center;
   font-size: 20px;
   margin-top: 20px;
 }
+
 #gameOverMessage {
   position: absolute;
   top: 50%;
@@ -77,17 +114,73 @@ body {
   border-radius: 6px;
   cursor: pointer;
 }
-#restartBtn:hover {
-  background-color: #900;
+#restartBtn:hover { background-color: #900; }
+
+/* --- Tela da Loja --- */
+.shop-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 20px;
+}
+.shop-coin-display {
+  font-size: 22px;
+  font-weight: bold;
+  background-color: #fff;
+  padding: 10px;
+  border: 2px solid #555;
+  border-radius: 8px;
 }
 
-.coin {
-  position: absolute;
-  bottom: 0;
-  left: -20px;
-  width: 20px;
-  height: 20px;
-  background-color: #ffd700; /* Dourado */
-  border-radius: 50%;
-  border: 2px solid #e6b800;
+.skin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  max-height: 60vh;
+  overflow-y: auto;
 }
+
+.skin-card {
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.skin-preview {
+  width: 60px;
+  height: 60px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #444; /* Padrão */
+  border: 1px solid #ddd;
+}
+
+.skin-card h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+
+.skin-btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  color: white;
+  width: 100%;
+}
+.buy { background-color: #2a9d8f; }
+.buy:disabled { background-color: #999; cursor: not-allowed; }
+.equip { background-color: #e9c46a; }
+.equipped { background-color: #f4a261; cursor: default; }
+
+/* --- Skins do Dinossauro --- */
+.dino-red { background-color: #e76f51; }
+.dino-blue { background-color: #219ebc; }
+.dino-zombie { background-color: #588157; border: 2px dashed #3a5a40; }

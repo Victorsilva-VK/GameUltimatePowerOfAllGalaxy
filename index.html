@@ -3,16 +3,38 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Jogo do Dinossauro - Recorde e Ofensas</title>
+<title>Jogo do Dinossauro - Menu Principal</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="game">
-  <div id="dino"></div>
-  <div id="gameOverMessage"></div>
+<!-- Menu Principal -->
+<div id="mainMenu" class="screen">
+  <h1>Dinossauro Corredor</h1>
+  <button id="startGameBtn" class="menu-btn">Iniciar Jogo</button>
+  <button id="openShopBtn" class="menu-btn">Loja de Skins</button>
 </div>
-<div id="score">Pontuação: 0 | Recorde: 0 | Moedas: <span id="coinCount">0</span></div>
+
+<!-- Tela de Jogo -->
+<main id="gameScreen" class="screen" style="display: none;">
+  <div id="game">
+    <div id="dino"></div>
+    <div id="gameOverMessage"></div>
+  </div>
+  <div id="score">Pontuação: 0 | Recorde: 0 | Moedas: <span id="coinCount">0</span></div>
+</main>
+
+<!-- Tela da Loja -->
+<div id="shopScreen" class="screen" style="display: none;">
+  <div class="shop-header">
+    <h2>Loja de Skins</h2>
+    <div class="shop-coin-display">Moedas: <span id="shopCoinCount">0</span></div>
+  </div>
+  <div id="skinContainer" class="skin-grid">
+    <!-- Skins serão geradas aqui pelo JavaScript -->
+  </div>
+  <button id="backToMenuBtn" class="menu-btn">Voltar ao Menu</button>
+</div>
 
 <script src="script.js" defer></script>
 
